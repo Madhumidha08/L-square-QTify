@@ -1,21 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
-import NavBar from "./components/NavBar/NavBar.jsx";
-
+import Navbar from "./components/Navbar/Navbar";
+import { Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { fetchTopAlbums, fetchSongs, fetchNewAlbums } from "../src/api/api";
 
 function App() {
+    const [data, setData] = useState({});
+
+    const generateData = (key, source) => {
+        source().then((data) => {
+            setData((prevData) => {
+                return{...prevData, [key]: data}; 
+            })
+        })
+    }
+
+    useEffect(() => {
+        generateData("topAlbums", fetchTopAlbums);
+        generateData("newAlbums", fetchNewAlbums);
+        generateData("songs", fetchSongs);
+    }, []);
+
+    const {topAlbums = [], newAlbums = [], songs = []} = data;
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <NavBar />
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-                 >
-                 </a>
-      </header>
-    </div>
+    <>  
+      <div>
+      <Navbar/>
+      <Outlet context={{data: {topAlbums, newAlbums, songs}}}/>
+      </div>
+    </>
   );
 }
 
