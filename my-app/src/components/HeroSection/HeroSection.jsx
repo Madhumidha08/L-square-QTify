@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./HeroSection.module.css";
-import headphone from "../../assets/headphone.png";
+import headphone from "../../assets/headphone.svg";
 
 export default function HeroSection(){
     return(
